@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Deposit Calculator</title>
+    <style>
+        .container {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        input {
+            width: 80%;
+            padding: 5px;
+        }
+        .result {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <table>
+            <tr>
+                <th>$ Sent to Us</th>
+                <th>Deposited on Game</th>
+                <th>Minimum</th>
+                <th>Maximum</th>
+            </tr>
+            <tr>
+                <td><input type="number" id="sent" placeholder="Enter amount"></td>
+                <td><input type="number" id="deposited" placeholder="Enter amount"></td>
+                <td class="result" id="minimum">-</td>
+                <td class="result" id="maximum">-</td>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        // Get input elements
+        const sentInput = document.getElementById('sent');
+        const depositedInput = document.getElementById('deposited');
+        
+        // Get result elements
+        const minCell = document.getElementById('minimum');
+        const maxCell = document.getElementById('maximum');
+
+        // Function to calculate and update values
+        function calculateValues() {
+            // Get input values, default to 0 if empty
+            const sent = parseFloat(sentInput.value) || 0;
+            const deposited = parseFloat(depositedInput.value) || 0;
+
+            // Calculate minimum
+            const depositedTimes3 = deposited * 3;
+            const minimum = depositedTimes3 < 60 ? 60 : depositedTimes3;
+
+            // Calculate maximum
+            const maximum = sent * 10;
+
+            // Update display
+            minCell.textContent = minimum.toFixed(2);
+            maxCell.textContent = maximum.toFixed(2);
+        }
+
+        // Add event listeners for input changes
+        sentInput.addEventListener('input', calculateValues);
+        depositedInput.addEventListener('input', calculateValues);
+    </script>
+</body>
+</html>
