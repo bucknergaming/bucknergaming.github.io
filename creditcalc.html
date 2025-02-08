@@ -1,33 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Deposit Calculator</title>
+    <title>Game Calculator</title>
     <style>
         .container {
             padding: 20px;
-            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
         }
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-bottom: 20px;
         }
         th, td {
             border: 1px solid #ddd;
-            padding: 12px;
+            padding: 8px;
             text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
         }
         input {
             width: 80%;
-            padding: 8px;
-            margin: 4px 0;
-            box-sizing: border-box;
+            padding: 5px;
         }
         .result {
+            margin-top: 20px;
             font-weight: bold;
-            color: #2c3e50;
         }
     </style>
 </head>
@@ -35,39 +32,47 @@
     <div class="container">
         <table>
             <tr>
-                <th>$Sent to Us</th>
-                <th>Deposited on Game</th>
+                <th>$ Sent to us</th>
+                <th>Deposited on game</th>
                 <th>Minimum</th>
                 <th>Maximum</th>
             </tr>
             <tr>
-                <td><input type="number" id="sent" oninput="calculate()"></td>
-                <td><input type="number" id="deposited" oninput="calculate()"></td>
-                <td class="result" id="minimum">-</td>
-                <td class="result" id="maximum">-</td>
+                <td><input type="number" id="sent" min="0"></td>
+                <td><input type="number" id="deposited" min="0"></td>
+                <td id="minimum">-</td>
+                <td id="maximum">-</td>
             </tr>
         </table>
+        <div id="resultText" class="result"></div>
     </div>
 
     <script>
-        function calculate() {
-            // Get input values
+        function calculateValues() {
             const sent = parseFloat(document.getElementById('sent').value) || 0;
             const deposited = parseFloat(document.getElementById('deposited').value) || 0;
-
-            // Calculate maximum
-            const maximum = sent * 10;
-            document.getElementById('maximum').textContent = maximum.toFixed(2);
-
+            
             // Calculate minimum
-            let minimum;
+            let min;
             if (deposited * 3 < 60) {
-                minimum = 60;
+                min = 60;
             } else {
-                minimum = (sent < 50) ? deposited * 3 : deposited * 4;
+                min = (sent < 50) ? deposited * 3 : deposited * 4;
             }
-            document.getElementById('minimum').textContent = minimum.toFixed(2);
+            
+            // Calculate maximum
+            const max = sent * 10;
+
+            // Update display
+            document.getElementById('minimum').textContent = min.toFixed(2);
+            document.getElementById('maximum').textContent = max.toFixed(2);
+            document.getElementById('resultText').textContent = 
+                `Player needs to bet between $${min.toFixed(2)} to $${max.toFixed(2)}`;
         }
+
+        // Add event listeners to both input fields
+        document.getElementById('sent').addEventListener('input', calculateValues);
+        document.getElementById('deposited').addEventListener('input', calculateValues);
     </script>
 </body>
 </html>
