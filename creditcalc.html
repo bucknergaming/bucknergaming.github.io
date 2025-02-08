@@ -12,16 +12,22 @@
             border-collapse: collapse;
         }
         th, td {
-            padding: 10px;
             border: 1px solid #ddd;
+            padding: 12px;
             text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
         }
         input {
             width: 80%;
-            padding: 5px;
+            padding: 8px;
+            margin: 4px 0;
+            box-sizing: border-box;
         }
         .result {
             font-weight: bold;
+            color: #2c3e50;
         }
     </style>
 </head>
@@ -29,14 +35,14 @@
     <div class="container">
         <table>
             <tr>
-                <th>$ Sent to Us</th>
+                <th>$Sent to Us</th>
                 <th>Deposited on Game</th>
                 <th>Minimum</th>
                 <th>Maximum</th>
             </tr>
             <tr>
-                <td><input type="number" id="sent" placeholder="Enter amount"></td>
-                <td><input type="number" id="deposited" placeholder="Enter amount"></td>
+                <td><input type="number" id="sent" oninput="calculate()"></td>
+                <td><input type="number" id="deposited" oninput="calculate()"></td>
                 <td class="result" id="minimum">-</td>
                 <td class="result" id="maximum">-</td>
             </tr>
@@ -44,35 +50,24 @@
     </div>
 
     <script>
-        // Get input elements
-        const sentInput = document.getElementById('sent');
-        const depositedInput = document.getElementById('deposited');
-        
-        // Get result elements
-        const minCell = document.getElementById('minimum');
-        const maxCell = document.getElementById('maximum');
-
-        // Function to calculate and update values
-        function calculateValues() {
-            // Get input values, default to 0 if empty
-            const sent = parseFloat(sentInput.value) || 0;
-            const deposited = parseFloat(depositedInput.value) || 0;
-
-            // Calculate minimum
-            const depositedTimes3 = deposited * 3;
-            const minimum = depositedTimes3 < 60 ? 60 : depositedTimes3;
+        function calculate() {
+            // Get input values
+            const sent = parseFloat(document.getElementById('sent').value) || 0;
+            const deposited = parseFloat(document.getElementById('deposited').value) || 0;
 
             // Calculate maximum
             const maximum = sent * 10;
+            document.getElementById('maximum').textContent = maximum.toFixed(2);
 
-            // Update display
-            minCell.textContent = minimum.toFixed(2);
-            maxCell.textContent = maximum.toFixed(2);
+            // Calculate minimum
+            let minimum;
+            if (deposited * 3 < 60) {
+                minimum = 60;
+            } else {
+                minimum = (sent < 50) ? deposited * 3 : deposited * 4;
+            }
+            document.getElementById('minimum').textContent = minimum.toFixed(2);
         }
-
-        // Add event listeners for input changes
-        sentInput.addEventListener('input', calculateValues);
-        depositedInput.addEventListener('input', calculateValues);
     </script>
 </body>
 </html>
